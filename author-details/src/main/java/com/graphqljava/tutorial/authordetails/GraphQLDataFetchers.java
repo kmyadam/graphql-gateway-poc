@@ -45,4 +45,12 @@ public class GraphQLDataFetchers {
                     .orElse(null);
         };
     }
+    
+    public Author getAuthorById(Long id) {
+    	return authors
+                .stream()
+                .filter(author -> author.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.graphqljava.tutorial.bookdetails.model.Author;
 import com.graphqljava.tutorial.bookdetails.model.Book;
 
 import graphql.schema.DataFetcher;
@@ -14,9 +15,9 @@ import graphql.schema.DataFetcher;
 public class GraphQLDataFetchers {
 
     private static List<Book> books = Arrays.asList(
-            new Book("book-1", "Harry Potter and the Philosopher's Stone", 223, 1L),
-    		new Book("book-2", "Moby Dick", 635, 2L),
-			new Book("book-3", "Interview with the vampire", 371, 3L)
+            new Book("book-1", "Harry Potter and the Philosopher's Stone", 223, new Author(1L)),
+    		new Book("book-2", "Moby Dick", 635, new Author(1L)),
+			new Book("book-3", "Interview with the vampire", 371, new Author(2L))
     );
 
 	/*
@@ -43,7 +44,7 @@ public class GraphQLDataFetchers {
             String authorId = dataFetchingEnvironment.getArgument("authorId");
             return books
                     .stream()
-                    .filter(book -> book.getAuthorId().equals(Long.parseLong(authorId)))
+                    .filter(book -> book.getAuthor().getId().equals(Long.parseLong(authorId)))
                     .collect(Collectors.toList());
         };
     }

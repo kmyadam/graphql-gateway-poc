@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.io.Resources;
-import com.graphqljava.tutorial.authordetails.model.Book;
+import com.graphqljava.tutorial.authordetails.model.Author;
 
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -47,10 +47,14 @@ public class GraphQLProvider {
         InputStream url = Resources.getResource("schema.graphqls").openStream();        
         Logger LOGGER2 = LoggerFactory.getLogger(FederatedEntityResolver.class);
         List<FederatedEntityResolver<?, ?>> entityResolvers = List.of(
+        		new FederatedEntityResolver<Long, Author>("Author", id -> graphQLDataFetchers.getAuthorById(id)) {
+                }
+        		/*
                 new FederatedEntityResolver<String, Book>("Book", id -> new Book(id)) {
                 	
                 	//LOGGER2.info("Err: {}", ex);
-                });
+                	}*/
+                );
 
         GraphQLSchema transformedGraphQLSchema = new FederatedSchemaBuilder()
                 .schemaInputStream(url)

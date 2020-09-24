@@ -7,3 +7,8 @@ type Author @key(fields: "id") {
     firstName: String!
     lastName: String!
 }
+
+type Book @key(fields: "id") @extends {
+   id: ID! @external
+   author: Author
+}

@@ -4,7 +4,7 @@ public class Book {
 	private String id;
 	private String name;
 	private int pageCount;
-	private Long authorId;
+	private Author author;
 
 	public Book() {}
 	
@@ -12,11 +12,11 @@ public class Book {
 		this.id = id;
 	}
 	
-	public Book(String id, String name, int pageCount, Long authorId) {
+	public Book(String id, String name, int pageCount, Author author) {
 		this.id = id;
 		this.name = name;
 		this.pageCount = pageCount;
-		this.authorId = authorId;
+		this.author = author;
 	}
 
 	/**
@@ -62,22 +62,22 @@ public class Book {
 	}
 
 	/**
-	 * @return the authorId
+	 * @return the author
 	 */
-	public Long getAuthorId() {
-		return authorId;
+	public Author getAuthor() {
+		return author;
 	}
 
 	/**
-	 * @param authorId the authorId to set
+	 * @param author the author to set
 	 */
-	public void setAuthorId(Long authorId) {
-		this.authorId = authorId;
+	public void setAuthor(Author author) {
+		this.author = author;
 	}
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", name=" + name + ", pageCount=" + pageCount + ", authorId=" + authorId + "]";
+		return "Book [id=" + id + ", name=" + name + ", pageCount=" + pageCount + ", author=" + author + "]";
 	}
-	
+
 }
