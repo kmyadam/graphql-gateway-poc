@@ -48,6 +48,13 @@ public class GraphQLDataFetchers {
                     .collect(Collectors.toList());
         };
     }
+    
+    public Author getAuthorByIdWithBooks(Long authorId) {
+    	return new Author(authorId, books
+                .stream()
+                .filter(book -> book.getAuthor().getId().equals(authorId))
+                .collect(Collectors.toList()));
+    }
 
 	/*
 	 * public DataFetcher getAuthorDataFetcher() { return dataFetchingEnvironment ->

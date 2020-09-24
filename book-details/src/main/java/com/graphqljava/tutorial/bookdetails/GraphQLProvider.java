@@ -45,7 +45,7 @@ public class GraphQLProvider {
         InputStream url = Resources.getResource("schema.graphqls").openStream();
         
         List<FederatedEntityResolver<?, ?>> entityResolvers = List.of(
-                new FederatedEntityResolver<Long, Author>("Author", authorId -> new Author(authorId)) {
+        		new FederatedEntityResolver<Long, Author>("Author", authorId -> graphQLDataFetchers.getAuthorByIdWithBooks(authorId)) {
                 }
         );
 
