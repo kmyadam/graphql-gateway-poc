@@ -1,4 +1,4 @@
-package com.graphqljava.tutorial.bookdetails;
+package com.graphqljava.tutorial.authordetails;
 
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 
@@ -8,12 +8,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.io.Resources;
-import com.graphqljava.tutorial.bookdetails.model.Author;
+import com.graphqljava.tutorial.authordetails.model.Book;
 
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -27,7 +29,7 @@ import io.gqljf.federation.tracing.FederatedTracingInstrumentation;
 
 @Component
 public class GraphQLProvider {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLProvider.class);
 
     @Autowired
     GraphQLDataFetchers graphQLDataFetchers;
@@ -42,12 +44,13 @@ public class GraphQLProvider {
         GraphQLSchema graphQLSchema = buildSchema(sdl);
         this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();*/
         // Changes related to Gateway Schema Support:
-        InputStream url = Resources.getResource("schema.graphqls").openStream();
-        
+        InputStream url = Resources.getResource("schema.graphqls").openStream();        
+        Logger LOGGER2 = LoggerFactory.getLogger(FederatedEntityResolver.class);
         List<FederatedEntityResolver<?, ?>> entityResolvers = List.of(
-                new FederatedEntityResolver<Long, Author>("Author", id -> new Author(id)) {
-                }
-        );
+                new FederatedEntityResolver<String, Book>("Book", id -> new Book(id)) {
+                	
+                	//LOGGER2.info("Err: {}", ex);
+                });
 
         GraphQLSchema transformedGraphQLSchema = new FederatedSchemaBuilder()
                 .schemaInputStream(url)
@@ -55,10 +58,13 @@ public class GraphQLProvider {
                 .federatedEntitiesResolvers(entityResolvers)
                 .build();
         
-        //GraphQLSchema transformedGraphQLSchema = new FederatedSchemaBuilder().schemaInputStream(url).runtimeWiring(buildWiring()).build();        
+        //GraphQLSchema transformedGraphQLSchema = new FederatedSchemaBuilder().schemaInputStream(url).runtimeWiring(buildWiring()).build();       
+        
         this.graphQL = GraphQL.newGraphQL(transformedGraphQLSchema)
         		.instrumentation(new FederatedTracingInstrumentation())
         		.build();
+        
+        LOGGER.info(graphQL.toString());
     }
 
     private GraphQLSchema buildSchema(String sdl) {
@@ -71,9 +77,8 @@ public class GraphQLProvider {
     private RuntimeWiring buildWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
-                        .dataFetcher("bookById", graphQLDataFetchers.getBookByIdDataFetcher())
-                        .dataFetcher("booksByAuthorId", graphQLDataFetchers.getBooksByAuthorIdDataFetcher()))
-                //.type(newTypeWiring("Book")
+                        .dataFetcher("authorById", graphQLDataFetchers.getAuthorDataFetcher()))
+                //.type(newTypeWiring("Author")
                         //.dataFetcher("author", graphQLDataFetchers.getAuthorDataFetcher()))
                 .build();
     }

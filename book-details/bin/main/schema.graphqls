@@ -1,16 +1,16 @@
-type Query {
-    bookById(id: ID): Book
+type Query @extends {
+    bookById(id: ID!): Book
+    booksByAuthorId(authorId: ID!): [Book]
 }
 
-type Book {
-    id: ID
-    name: String
-    pageCount: Int
-    author: Author
+type Book @key(fields: "id"){
+    id: ID!
+    name: String!
+    pageCount: Int!
+    authorId: ID!
 }
 
-type Author {
-    id: ID
-    firstName: String
-    lastName: String
+type Author @key(fields: "id") @extends {
+    id: ID! @external
+    books: [Book]
 }
