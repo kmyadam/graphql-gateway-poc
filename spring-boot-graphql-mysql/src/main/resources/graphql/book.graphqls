@@ -1,0 +1,17 @@
+type Book {
+	id: ID!
+	title: String!
+	description: String
+	author: Author
+}
+
+extend type Query {
+	findAllBook: [Book]!
+	countBook: Long!
+}
+
+extend type Mutation {
+	createBook(title: String!, description: String, author: ID!): Book!
+	updateBook(id: ID!, title: String, description: String): Book!
+	deleteBook(id: ID!): Boolean
+}
